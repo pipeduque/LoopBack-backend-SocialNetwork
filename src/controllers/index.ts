@@ -11,3 +11,8 @@ export * from './report-user.controller';
 export * from './report.controller';
 export * from './publication-file-publication.controller';
 export * from './publication-file.controller';
+export * from './reaction.controller';
+export * from './publication-reaction-reaction.controller';
+export * from './publication-reaction-user.controller';
+export * from './publication-reaction-publication.controller';
+export * from './publication-reaction.controller';
