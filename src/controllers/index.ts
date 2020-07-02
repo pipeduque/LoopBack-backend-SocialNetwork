@@ -6,4 +6,6 @@ export * from './publication-user.controller';
 export * from './publication.controller';
 export * from './user-publication.controller';
 export * from './user.controller';
-
+export * from './report-publication.controller';
+export * from './report-user.controller';
+export * from './report.controller';
