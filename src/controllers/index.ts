@@ -9,3 +9,5 @@ export * from './user.controller';
 export * from './report-publication.controller';
 export * from './report-user.controller';
 export * from './report.controller';
+export * from './publication-file-publication.controller';
+export * from './publication-file.controller';

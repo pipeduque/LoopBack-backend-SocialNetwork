@@ -1,4 +1,4 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Publication} from './publication.model';
 import {User} from './user.model';
 
@@ -16,6 +16,12 @@ export class Comment extends Entity {
     required: true,
   })
   text: string;
+
+  @property({
+    type: 'string',
+    required: false,
+  })
+  image: string;
 
   @property({
     type: 'date',
