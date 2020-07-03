@@ -5,3 +5,5 @@ export * from './report.repository';
 export * from './publication-file.repository';
 export * from './reaction.repository';
 export * from './publication-reaction.repository';
+export * from './chat.repository';
+export * from './message.repository';

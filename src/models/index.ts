@@ -5,3 +5,5 @@ export * from './report.model';
 export * from './publication-file.model';
 export * from './reaction.model';
 export * from './publication-reaction.model';
+export * from './chat.model';
+export * from './message.model';
