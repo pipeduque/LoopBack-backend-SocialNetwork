@@ -7,3 +7,5 @@ export * from './reaction.model';
 export * from './publication-reaction.model';
 export * from './chat.model';
 export * from './message.model';
+export * from './ownerhasfollowers.model';
+export * from './owner.model';

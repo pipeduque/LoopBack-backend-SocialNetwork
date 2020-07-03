@@ -7,3 +7,5 @@ export * from './reaction.repository';
 export * from './publication-reaction.repository';
 export * from './chat.repository';
 export * from './message.repository';
+export * from './owner.repository';
+export * from './ownerhasfollowers.repository';

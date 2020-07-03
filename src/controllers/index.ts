@@ -24,3 +24,8 @@ export * from './user-message.controller';
 export * from './message-user.controller';
 export * from './chat.controller';
 export * from './message.controller';
+export * from './user-owner.controller';
+export * from './owner-ownerhasfollowers.controller';
+export * from './user-ownerhasfollowers.controller';
+export * from './owner.controller';
+export * from './ownerhasfollowers.controller';

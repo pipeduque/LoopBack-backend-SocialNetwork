@@ -2,6 +2,8 @@ import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Publication} from './publication.model';
 import {Chat} from './chat.model';
 import {Message} from './message.model';
+import {Owner} from './owner.model';
+import {Ownerhasfollowers} from './ownerhasfollowers.model';
 
 @model()
 export class User extends Entity {
@@ -82,6 +84,12 @@ export class User extends Entity {
 
   @hasMany(() => Message)
   messages: Message[];
+
+  @hasMany(() => Owner)
+  owners: Owner[];
+
+  @hasMany(() => Ownerhasfollowers)
+  ownerhasfollowers: Ownerhasfollowers[];
 
   constructor(data?: Partial<User>) {
     super(data);
