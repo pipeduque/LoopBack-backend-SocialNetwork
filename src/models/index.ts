@@ -9,3 +9,6 @@ export * from './chat.model';
 export * from './message.model';
 export * from './ownerhasfollowers.model';
 export * from './owner.model';
+export * from './room.model';
+export * from './request.model';
+export * from './occupant.model';
