@@ -29,3 +29,8 @@ export * from './owner-ownerhasfollowers.controller';
 export * from './user-ownerhasfollowers.controller';
 export * from './owner.controller';
 export * from './ownerhasfollowers.controller';
+export * from './poll-user.controller';
+export * from './poll.controller';
+export * from './poll-answer-user.controller';
+export * from './poll-answer-poll.controller';
+export * from './poll-answer.controller';

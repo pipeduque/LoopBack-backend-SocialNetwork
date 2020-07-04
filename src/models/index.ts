@@ -9,3 +9,5 @@ export * from './chat.model';
 export * from './message.model';
 export * from './ownerhasfollowers.model';
 export * from './owner.model';
+export * from './poll.model';
+export * from './poll-answer.model';

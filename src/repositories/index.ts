@@ -9,3 +9,5 @@ export * from './chat.repository';
 export * from './message.repository';
 export * from './owner.repository';
 export * from './ownerhasfollowers.repository';
+export * from './poll.repository';
+export * from './poll-answer.repository';
