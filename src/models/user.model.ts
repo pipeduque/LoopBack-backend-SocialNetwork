@@ -1,10 +1,10 @@
 import {Entity, hasMany, model, property} from '@loopback/repository';
-import {Publication} from './publication.model';
 import {Chat} from './chat.model';
 import {Message} from './message.model';
+import {Occupant} from './occupant.model';
 import {Owner} from './owner.model';
 import {Ownerhasfollowers} from './ownerhasfollowers.model';
-import {Occupant} from './occupant.model';
+import {Publication} from './publication.model';
 import {Request} from './request.model';
 
 @model()

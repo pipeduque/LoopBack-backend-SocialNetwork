@@ -4,25 +4,30 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
+  del, get,
+  getModelSchemaRef, param,
+
+
+  patch, post,
+
+
+
+
   put,
-  del,
-  requestBody,
+
+  requestBody
 } from '@loopback/rest';
+import {Keys} from '../keys/keys';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
-
+import {Encryption} from '../services/encryption.service';
 export class UserController {
   constructor(
     @repository(UserRepository)
-    public userRepository : UserRepository,
+    public userRepository: UserRepository,
   ) {}
 
   @post('/user', {
@@ -46,6 +51,8 @@ export class UserController {
     })
     user: Omit<User, 'id'>,
   ): Promise<User> {
+    let password = new Encryption(Keys.SHA_512).Encrypt(user.password);
+    user.password = password;
     return this.userRepository.create(user);
   }
 
