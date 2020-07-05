@@ -8,7 +8,18 @@ import {
 } from '@loopback/repository';
 import {
   del, get,
-  getModelSchemaRef, param,
+  getModelSchemaRef,
+
+
+
+
+
+
+
+
+
+
+  HttpErrors, param,
 
 
   patch, post,
@@ -22,13 +33,20 @@ import {
 } from '@loopback/rest';
 import {Keys} from '../keys/keys';
 import {User} from '../models';
+import Credentials from '../models/credentials.mode';
 import {UserRepository} from '../repositories';
+import {AuthService} from '../services/auth.service';
 import {Encryption} from '../services/encryption.service';
 export class UserController {
+
+  authService: AuthService;
+
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
-  ) {}
+  ) {
+    this.authService = new AuthService(this.userRepository);
+  }
 
   @post('/user', {
     responses: {
@@ -177,5 +195,27 @@ export class UserController {
   })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.userRepository.deleteById(id);
+  }
+
+  @post('/login', {
+    responses: {
+      '200': {
+        description: 'Login'
+      },
+    },
+  })
+  async login(
+    @requestBody() credentials: Credentials
+  ): Promise<Object> {
+    let user = await this.authService.identify(credentials);
+    if (user) {
+      let token = await this.authService.generateToken(user);
+      return {
+        data: user,
+        token: token
+      }
+    } else {
+      throw new HttpErrors[401]('Usuario o contraseña invalidad');
+    }
   }
 }
