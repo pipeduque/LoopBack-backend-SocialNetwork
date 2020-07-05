@@ -52,7 +52,8 @@ export class UserController {
     user: Omit<User, 'id'>,
   ): Promise<User> {
     let password = new Encryption(Keys.SHA_512).Encrypt(user.password);
-    user.password = password;
+    let password1 = new Encryption(Keys.SHA_512).Encrypt(password);
+    user.password = password1;
     return this.userRepository.create(user);
   }
 
