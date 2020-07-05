@@ -11,3 +11,6 @@ export * from './owner.repository';
 export * from './ownerhasfollowers.repository';
 export * from './poll.repository';
 export * from './poll-answer.repository';
+export * from './occupant.repository';
+export * from './request.repository';
+export * from './room.repository';

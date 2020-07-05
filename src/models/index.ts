@@ -11,3 +11,6 @@ export * from './ownerhasfollowers.model';
 export * from './owner.model';
 export * from './poll.model';
 export * from './poll-answer.model';
+export * from './room.model';
+export * from './request.model';
+export * from './occupant.model';
