@@ -9,7 +9,7 @@ export class Room extends Entity {
   @property({
     type: 'string',
     id: true,
-    generated: true,
+    generated:true,
   })
   id?: string;
 

@@ -41,3 +41,6 @@ export * from './request-user.controller';
 export * from './user-request.controller';
 export * from './room-owner.controller';
 export * from './owner-room.controller';
+export * from './room.controller';
+export * from './occupant.controller';
+export * from './request.controller';
