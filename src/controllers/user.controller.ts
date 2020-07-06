@@ -207,7 +207,7 @@ export class UserController {
   async login(
     @requestBody() credentials: Credentials
   ): Promise<Object> {
-    let user = await this.authService.identify(credentials);
+    let user = await this.authService.identify(credentials.email, credentials.password);
     if (user) {
       let token = await this.authService.generateToken(user);
       return {

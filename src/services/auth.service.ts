@@ -1,7 +1,6 @@
 import {repository} from '@loopback/repository';
 import {Keys} from '../keys/keys';
 import {User} from '../models';
-import Credentials from '../models/credentials.mode';
 import {UserRepository} from '../repositories';
 import {Encryption} from './encryption.service';
 const jwt = require('jsonwebtoken');
@@ -12,10 +11,10 @@ export class AuthService {
     public userRepository: UserRepository
   ) {}
 
-  async identify(credentials: Credentials): Promise<User | false> {
-    let user = await this.userRepository.findOne({where: {email: credentials.email}})
+  async identify(email: string, password: string): Promise<User | false> {
+    let user = await this.userRepository.findOne({where: {email: email}})
     if (user) {
-      let pass = new Encryption(Keys.SHA_512).Encrypt(credentials.password);
+      let pass = new Encryption(Keys.SHA_512).Encrypt(password);
       if (pass === user.password) {
         return user;
       }
@@ -29,10 +28,18 @@ export class AuthService {
       exp: Keys.TOKEN_EXP,
       data: {
         id: user.id,
-        username: user.firstName,
-
+        username: user.firstName
       }
     }, Keys.JWT_SECRET_KEY);
     return token;
+  }
+
+  async VerifyToken(token: string) {
+    try {
+      let data = jwt.verify(token, Keys.JWT_SECRET_KEY).data;
+      return data;
+    } catch (error) {
+      return false;
+    }
   }
 }

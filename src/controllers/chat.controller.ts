@@ -1,20 +1,25 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
+  del, get,
+  getModelSchemaRef, param,
+
+
+  patch, post,
+
+
+
+
   put,
-  del,
-  requestBody,
+
+  requestBody
 } from '@loopback/rest';
 import {Chat} from '../models';
 import {ChatRepository} from '../repositories';
@@ -22,7 +27,7 @@ import {ChatRepository} from '../repositories';
 export class ChatController {
   constructor(
     @repository(ChatRepository)
-    public chatRepository : ChatRepository,
+    public chatRepository: ChatRepository,
   ) {}
 
   @post('/chat', {
@@ -49,6 +54,7 @@ export class ChatController {
     return this.chatRepository.create(chat);
   }
 
+  @authenticate('TokenStrategy')
   @get('/chat/count', {
     responses: {
       '200': {
