@@ -76,7 +76,13 @@ export class User extends Entity {
     type: 'array',
     itemType: 'string',
   })
-  prest?: string[];
+  interests?: string[];
+
+  @property({
+    type: 'number',
+    itemType: 'string',
+  })
+  role?: string[];
 
   @hasMany(() => Publication)
   publications: Publication[];

@@ -28,7 +28,8 @@ export class AuthService {
       exp: Keys.TOKEN_EXP,
       data: {
         id: user.id,
-        username: user.firstName
+        username: user.firstName,
+        role: user.role
       }
     }, Keys.JWT_SECRET_KEY);
     return token;
