@@ -1,6 +1,6 @@
-import {belongsTo, Entity, model, property, hasOne} from '@loopback/repository';
-import {User} from './user.model';
+import {belongsTo, Entity, hasOne, model, property} from '@loopback/repository';
 import {Room} from './room.model';
+import {User} from './user.model';
 
 @model()
 export class Publication extends Entity {
