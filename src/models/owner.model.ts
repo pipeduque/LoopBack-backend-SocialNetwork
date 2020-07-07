@@ -1,6 +1,5 @@
 import {Entity, model, property, hasMany} from '@loopback/repository';
 import {Ownerhasfollowers} from './ownerhasfollowers.model';
-import {Room} from './room.model';
 
 @model()
 export class Owner extends Entity {
@@ -31,13 +30,7 @@ export class Owner extends Entity {
   @hasMany(() => Ownerhasfollowers)
   ownerhasfollowers: Ownerhasfollowers[];
 
-  @property({
-    type: 'string',
-  })
-  roomId?: string;
 
-  @hasMany(() => Room)
-  rooms: Room[];
 
   constructor(data?: Partial<Owner>) {
     super(data);

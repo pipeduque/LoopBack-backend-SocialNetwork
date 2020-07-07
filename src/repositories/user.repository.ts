@@ -12,14 +12,13 @@ import {
   Ownerhasfollowers,
   Publication,
   User,
-  UserRelations, Occupant, Request} from '../models';
+  UserRelations} from '../models';
 import {ChatRepository} from './chat.repository';
 import {MessageRepository} from './message.repository';
 import {OwnerRepository} from './owner.repository';
 import {OwnerhasfollowersRepository} from './ownerhasfollowers.repository';
 import {PublicationRepository} from './publication.repository';
-import {OccupantRepository} from './occupant.repository';
-import {RequestRepository} from './request.repository';
+
 
 export class UserRepository extends DefaultCrudRepository<
   User,
@@ -51,9 +50,7 @@ export class UserRepository extends DefaultCrudRepository<
     typeof User.prototype.id
   >;
 
-  public readonly occupants: HasManyRepositoryFactory<Occupant, typeof User.prototype.id>;
 
-  public readonly requests: HasManyRepositoryFactory<Request, typeof User.prototype.id>;
 
   constructor(
     @inject('datasources.mongo') dataSource: MongoDataSource,
@@ -68,13 +65,10 @@ export class UserRepository extends DefaultCrudRepository<
     @repository.getter('OwnerhasfollowersRepository')
     protected ownerhasfollowersRepositoryGetter: Getter<
       OwnerhasfollowersRepository
-    >, @repository.getter('OccupantRepository') protected occupantRepositoryGetter: Getter<OccupantRepository>, @repository.getter('RequestRepository') protected requestRepositoryGetter: Getter<RequestRepository>,
+    >,
   ) {
     super(User, dataSource);
-    this.requests = this.createHasManyRepositoryFactoryFor('requests', requestRepositoryGetter,);
-    this.registerInclusionResolver('requests', this.requests.inclusionResolver);
-    this.occupants = this.createHasManyRepositoryFactoryFor('occupants', occupantRepositoryGetter,);
-    this.registerInclusionResolver('occupants', this.occupants.inclusionResolver);
+    
     this.ownerhasfollowers = this.createHasManyRepositoryFactoryFor(
       'ownerhasfollowers',
       ownerhasfollowersRepositoryGetter,
