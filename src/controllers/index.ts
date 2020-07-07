@@ -34,4 +34,15 @@ export * from './poll.controller';
 export * from './poll-answer-user.controller';
 export * from './poll-answer-poll.controller';
 export * from './poll-answer.controller';
-
+export * from './room-publication.controller';
+export * from './publication-room.controller';
+export * from './occupant-room.controller';
+export * from './room-occupant.controller';
+export * from './occupant-user.controller';
+export * from './user-occupant.controller';
+export * from './request-room.controller';
+export * from './room-request.controller';
+export * from './request-user.controller';
+export * from './user-request.controller';
+export * from './owner-room.controller';
+export * from './room-owner.controller';

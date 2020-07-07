@@ -1,4 +1,8 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasOne, hasMany, belongsTo} from '@loopback/repository';
+import {Publication} from './publication.model';
+import {Occupant} from './occupant.model';
+import {Request} from './request.model';
+import {Owner} from './owner.model';
 
 @model()
 export class Room extends Entity {
@@ -37,6 +41,17 @@ export class Room extends Entity {
   })
   status: boolean;
 
+  @hasOne(() => Publication)
+  publication: Publication;
+
+  @hasMany(() => Occupant)
+  occupants: Occupant[];
+
+  @hasMany(() => Request)
+  requests: Request[];
+
+  @belongsTo(() => Owner)
+  ownerId: string;
 
   constructor(data?: Partial<Room>) {
     super(data);
