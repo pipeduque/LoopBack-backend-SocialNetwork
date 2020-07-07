@@ -54,7 +54,7 @@ export class ChatController {
     return this.chatRepository.create(chat);
   }
 
-  @authenticate('TokenStrategy')
+  @authenticate('TokenAdminStrategy')
   @get('/chat/count', {
     responses: {
       '200': {

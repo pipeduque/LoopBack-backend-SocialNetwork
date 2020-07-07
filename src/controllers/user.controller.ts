@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -75,6 +76,7 @@ export class UserController {
     return this.userRepository.create(user);
   }
 
+  @authenticate('TokenAdminStrategy')
   @get('/user/count', {
     responses: {
       '200': {
@@ -89,6 +91,7 @@ export class UserController {
     return this.userRepository.count(where);
   }
 
+  @authenticate('TokenUserStrategy')
   @get('/user', {
     responses: {
       '200': {
@@ -110,6 +113,7 @@ export class UserController {
     return this.userRepository.find(filter);
   }
 
+  @authenticate('TokenUserStrategy')
   @patch('/user', {
     responses: {
       '200': {
@@ -132,6 +136,7 @@ export class UserController {
     return this.userRepository.updateAll(user, where);
   }
 
+  @authenticate('TokenUserStrategy')
   @get('/user/{id}', {
     responses: {
       '200': {
@@ -151,6 +156,7 @@ export class UserController {
     return this.userRepository.findById(id, filter);
   }
 
+  @authenticate('TokenUserStrategy')
   @patch('/user/{id}', {
     responses: {
       '204': {
@@ -172,6 +178,7 @@ export class UserController {
     await this.userRepository.updateById(id, user);
   }
 
+  @authenticate('TokenUserStrategy')
   @put('/user/{id}', {
     responses: {
       '204': {
@@ -186,6 +193,7 @@ export class UserController {
     await this.userRepository.replaceById(id, user);
   }
 
+  @authenticate('TokenUserStrategy')
   @del('/user/{id}', {
     responses: {
       '204': {
