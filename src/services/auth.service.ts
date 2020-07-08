@@ -40,6 +40,7 @@ export class AuthService {
         data: {
           id: user.id,
           username: user.firstName,
+          role: user.role,
         },
       },
       Keys.JWT_SECRET_KEY,

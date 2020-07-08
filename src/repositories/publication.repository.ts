@@ -13,13 +13,13 @@ export class PublicationRepository extends DefaultCrudRepository<
 
   public readonly user: BelongsToAccessor<User, typeof Publication.prototype.id>;
 
-  public readonly room: HasOneRepositoryFactory<Room, typeof Publication.prototype.id>;
+  public readonly room: BelongsToAccessor<Room, typeof Publication.prototype.id>;
 
   constructor(
     @inject('datasources.mongo') dataSource: MongoDataSource, @repository.getter('UserRepository') protected userRepositoryGetter: Getter<UserRepository>, @repository.getter('RoomRepository') protected roomRepositoryGetter: Getter<RoomRepository>,
   ) {
     super(Publication, dataSource);
-    this.room = this.createHasOneRepositoryFactoryFor('room', roomRepositoryGetter);
+    this.room = this.createBelongsToAccessorFor('room', roomRepositoryGetter,);
     this.registerInclusionResolver('room', this.room.inclusionResolver);
     this.user = this.createBelongsToAccessorFor('user', userRepositoryGetter,);
     this.registerInclusionResolver('user', this.user.inclusionResolver);

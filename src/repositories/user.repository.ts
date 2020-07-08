@@ -75,6 +75,7 @@ export class UserRepository extends DefaultCrudRepository<
     this.registerInclusionResolver('requests', this.requests.inclusionResolver);
     this.occupants = this.createHasManyRepositoryFactoryFor('occupants', occupantRepositoryGetter,);
     this.registerInclusionResolver('occupants', this.occupants.inclusionResolver);
+    
     this.ownerhasfollowers = this.createHasManyRepositoryFactoryFor(
       'ownerhasfollowers',
       ownerhasfollowersRepositoryGetter,

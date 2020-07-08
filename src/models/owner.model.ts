@@ -31,11 +31,6 @@ export class Owner extends Entity {
   @hasMany(() => Ownerhasfollowers)
   ownerhasfollowers: Ownerhasfollowers[];
 
-  @property({
-    type: 'string',
-  })
-  roomId?: string;
-
   @hasMany(() => Room)
   rooms: Room[];
 

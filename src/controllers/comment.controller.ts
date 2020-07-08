@@ -1,20 +1,25 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
+  del, get,
+  getModelSchemaRef, param,
+
+
+  patch, post,
+
+
+
+
   put,
-  del,
-  requestBody,
+
+  requestBody
 } from '@loopback/rest';
 import {Comment} from '../models';
 import {CommentRepository} from '../repositories';
@@ -22,9 +27,10 @@ import {CommentRepository} from '../repositories';
 export class CommentController {
   constructor(
     @repository(CommentRepository)
-    public commentRepository : CommentRepository,
+    public commentRepository: CommentRepository,
   ) {}
 
+  @authenticate('TokenUserStrategy')
   @post('/comment', {
     responses: {
       '200': {
@@ -49,6 +55,7 @@ export class CommentController {
     return this.commentRepository.create(comment);
   }
 
+  @authenticate('TokenAdminStrategy')
   @get('/comment/count', {
     responses: {
       '200': {

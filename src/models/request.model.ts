@@ -1,15 +1,9 @@
-import {Entity, model, property, hasOne} from '@loopback/repository';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
 import {Room} from './room.model';
 import {User} from './user.model';
 
 @model()
 export class Request extends Entity {
-  @property({
-    type: 'date',
-    required: true,
-  })
-  date: string;
-
   @property({
     type: 'string',
     id: true,
@@ -18,26 +12,22 @@ export class Request extends Entity {
   id?: string;
 
   @property({
+    type: 'date',
+    required: true,
+  })
+  date: string;
+
+  @property({
     type: 'boolean',
     required: true,
   })
   status: boolean;
 
-  @hasOne(() => Room)
-  room: Room;
+  @belongsTo(() => Room)
+  roomId: string;
 
-  @property({
-    type: 'string',
-  })
-  roomId?: string;
-
-  @hasOne(() => User)
-  user: User;
-
-  @property({
-    type: 'string',
-  })
-  userId?: string;
+  @belongsTo(() => User)
+  userId: string;
 
   constructor(data?: Partial<Request>) {
     super(data);
