@@ -14,3 +14,4 @@ export * from './poll-answer.model';
 export * from './room.model';
 export * from './request.model';
 export * from './occupant.model';
+export * from './sms-notification.model';

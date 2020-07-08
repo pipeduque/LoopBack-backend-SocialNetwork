@@ -4,41 +4,28 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where
+  Where,
 } from '@loopback/repository';
 import {
-  del, get,
+  del,
+  get,
   getModelSchemaRef,
-
-
-
-
-
-
-
-
-
-
-  HttpErrors, param,
-
-
-  patch, post,
-
-
-
-
+  HttpErrors,
+  param,
+  patch,
+  post,
   put,
-
-  requestBody
+  requestBody,
 } from '@loopback/rest';
 import {Keys} from '../keys/keys';
 import {User} from '../models';
 import Credentials from '../models/credentials.mode';
+import PasswordResetData from '../models/password-reset-data.mode';
 import {UserRepository} from '../repositories';
 import {AuthService} from '../services/auth.service';
 import {Encryption} from '../services/encryption.service';
-export class UserController {
 
+export class UserController {
   authService: AuthService;
 
   constructor(
@@ -69,8 +56,8 @@ export class UserController {
     })
     user: Omit<User, 'id'>,
   ): Promise<User> {
-    let password = new Encryption(Keys.SHA_512).Encrypt(user.password);
-    let password1 = new Encryption(Keys.SHA_512).Encrypt(password);
+    let paconstord = new Encryption(Keys.SHA_512).Encrypt(user.password);
+    let password1 = new Encryption(Keys.SHA_512).Encrypt(paconstord);
     user.password = password1;
     return this.userRepository.create(user);
   }
@@ -83,9 +70,7 @@ export class UserController {
       },
     },
   })
-  async count(
-    @param.where(User) where?: Where<User>,
-  ): Promise<Count> {
+  async count(@param.where(User) where?: Where<User>): Promise<Count> {
     return this.userRepository.count(where);
   }
 
@@ -104,9 +89,7 @@ export class UserController {
       },
     },
   })
-  async find(
-    @param.filter(User) filter?: Filter<User>,
-  ): Promise<User[]> {
+  async find(@param.filter(User) filter?: Filter<User>): Promise<User[]> {
     return this.userRepository.find(filter);
   }
 
@@ -146,7 +129,7 @@ export class UserController {
   })
   async findById(
     @param.path.string('id') id: string,
-    @param.filter(User, {exclude: 'where'}) filter?: FilterExcludingWhere<User>
+    @param.filter(User, {exclude: 'where'}) filter?: FilterExcludingWhere<User>,
   ): Promise<User> {
     return this.userRepository.findById(id, filter);
   }
@@ -200,22 +183,59 @@ export class UserController {
   @post('/login', {
     responses: {
       '200': {
-        description: 'Login'
+        description: 'Login',
       },
     },
   })
-  async login(
-    @requestBody() credentials: Credentials
-  ): Promise<Object> {
-    let user = await this.authService.identify(credentials.email, credentials.password);
+  async login(@requestBody() credentials: Credentials): Promise<Object> {
+    let user = await this.authService.identify(
+      credentials.email,
+      credentials.password,
+    );
     if (user) {
       let token = await this.authService.generateToken(user);
       return {
         data: user,
-        token: token
-      }
+        token: token,
+      };
     } else {
       throw new HttpErrors[401]('Usuario o contraseña invalidad');
     }
+  }
+
+  @post('/password-reset', {
+    responses: {
+      '200': {
+        description: 'Login',
+      },
+    },
+  })
+  async reset(
+    @requestBody() passwordResetData: PasswordResetData,
+  ): Promise<Object> {
+    let randomPassword = this.authService.ResetPassword(
+      passwordResetData.email,
+    );
+    if (randomPassword) {
+      // send sms or mail with new password
+      // 1. sms
+      // 2. email
+      switch (passwordResetData.type) {
+        case 1:
+          //send sms
+          console.log('Sending sms: ' + randomPassword);
+          return randomPassword;
+          break;
+        case 2:
+          //send mail
+          console.log('Sending mail: ' + randomPassword);
+          return randomPassword;
+          break;
+
+        default:
+          break;
+      }
+    }
+    throw new HttpErrors[400]('User not found');
   }
 }
