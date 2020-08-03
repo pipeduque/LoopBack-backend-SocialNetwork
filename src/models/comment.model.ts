@@ -34,6 +34,11 @@ export class Comment extends Entity {
   @belongsTo(() => User)
   userId: string;
 
+  @property({
+    type: 'string',
+  })
+  notificationId?: string;
+
   constructor(data?: Partial<Comment>) {
     super(data);
   }

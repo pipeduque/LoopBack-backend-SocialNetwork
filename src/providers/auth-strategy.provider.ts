@@ -1,6 +1,6 @@
 import {
   AuthenticationBindings,
-  AuthenticationMetadata
+  AuthenticationMetadata,
 } from '@loopback/authentication';
 import {inject, Provider, ValueOrPromise} from '@loopback/context';
 import {repository} from '@loopback/repository';
@@ -17,7 +17,7 @@ export class MyAuthStrategyProvider implements Provider<Strategy | undefined> {
     @inject(AuthenticationBindings.METADATA)
     private metadata: AuthenticationMetadata,
     @repository(UserRepository)
-    public userRepository: UserRepository
+    public userRepository: UserRepository,
   ) {
     this.authService = new AuthService(userRepository);
   }
@@ -34,9 +34,9 @@ export class MyAuthStrategyProvider implements Provider<Strategy | undefined> {
         return new BasicStrategy(this.VerifyUser.bind(this));
       case 'TokenUserStrategy':
         return new BearerStrategy(this.VerifyUserToken.bind(this));
-      case 'TokenAdminStrategy'://Solo puede ver
+      case 'TokenAdminStrategy': //Solo puede ver
         return new BearerStrategy(this.VerifyAdminToken.bind(this));
-      case 'TokenSuperAdminStrategy'://Puede hacer todo
+      case 'TokenSuperAdminStrategy': //Puede hacer todo
         return new BearerStrategy(this.VerifySuperAdminToken.bind(this));
       case 'TokenPublicityStrategy':
         return new BearerStrategy(this.VerifyPublicityToken.bind(this));

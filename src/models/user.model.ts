@@ -1,10 +1,11 @@
 import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Chat} from './chat.model';
 import {Message} from './message.model';
+import {Notification} from './notification.model';
+import {Occupant} from './occupant.model';
 import {Owner} from './owner.model';
 import {Ownerhasfollowers} from './ownerhasfollowers.model';
 import {Publication} from './publication.model';
-import {Occupant} from './occupant.model';
 import {Request} from './request.model';
 
 @model()
@@ -38,10 +39,10 @@ export class User extends Entity {
   secondSurname?: string;
 
   @property({
-    type: 'number',
+    type: 'string',
     required: true,
   })
-  cellphone: number;
+  cellphone: string;
 
   @property({
     type: 'string',
@@ -104,6 +105,9 @@ export class User extends Entity {
 
   @hasMany(() => Request)
   requests: Request[];
+
+  @hasMany(() => Notification)
+  notification: Notification[];
 
   constructor(data?: Partial<User>) {
     super(data);

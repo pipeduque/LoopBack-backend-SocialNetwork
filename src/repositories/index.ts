@@ -15,3 +15,4 @@ export * from './poll-answer.repository';
 export * from './room.repository';
 export * from './occupant.repository';
 export * from './request.repository';
+export * from './notification.repository';

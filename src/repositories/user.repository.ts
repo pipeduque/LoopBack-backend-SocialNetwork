@@ -12,7 +12,7 @@ import {
   Ownerhasfollowers,
   Publication,
   User,
-  UserRelations, Occupant, Request} from '../models';
+  UserRelations, Occupant, Request, Notification} from '../models';
 import {ChatRepository} from './chat.repository';
 import {MessageRepository} from './message.repository';
 import {OwnerRepository} from './owner.repository';
@@ -20,6 +20,7 @@ import {OwnerhasfollowersRepository} from './ownerhasfollowers.repository';
 import {PublicationRepository} from './publication.repository';
 import {OccupantRepository} from './occupant.repository';
 import {RequestRepository} from './request.repository';
+import {NotificationRepository} from './notification.repository';
 
 export class UserRepository extends DefaultCrudRepository<
   User,
@@ -55,6 +56,8 @@ export class UserRepository extends DefaultCrudRepository<
 
   public readonly requests: HasManyRepositoryFactory<Request, typeof User.prototype.id>;
 
+  public readonly notification: HasManyRepositoryFactory<Notification, typeof User.prototype.id>;
+
   constructor(
     @inject('datasources.mongo') dataSource: MongoDataSource,
     @repository.getter('PublicationRepository')
@@ -68,9 +71,11 @@ export class UserRepository extends DefaultCrudRepository<
     @repository.getter('OwnerhasfollowersRepository')
     protected ownerhasfollowersRepositoryGetter: Getter<
       OwnerhasfollowersRepository
-    >, @repository.getter('OccupantRepository') protected occupantRepositoryGetter: Getter<OccupantRepository>, @repository.getter('RequestRepository') protected requestRepositoryGetter: Getter<RequestRepository>,
+    >, @repository.getter('OccupantRepository') protected occupantRepositoryGetter: Getter<OccupantRepository>, @repository.getter('RequestRepository') protected requestRepositoryGetter: Getter<RequestRepository>, @repository.getter('NotificationRepository') protected notificationRepositoryGetter: Getter<NotificationRepository>,
   ) {
     super(User, dataSource);
+    this.notification = this.createHasManyRepositoryFactoryFor('notification', notificationRepositoryGetter,);
+    this.registerInclusionResolver('notification', this.notification.inclusionResolver);
     this.requests = this.createHasManyRepositoryFactoryFor('requests', requestRepositoryGetter,);
     this.registerInclusionResolver('requests', this.requests.inclusionResolver);
     this.occupants = this.createHasManyRepositoryFactoryFor('occupants', occupantRepositoryGetter,);

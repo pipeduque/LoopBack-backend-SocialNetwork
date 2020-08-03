@@ -21,10 +21,13 @@ import {
 import {Keys} from '../keys/keys';
 import {User} from '../models';
 import Credentials from '../models/credentials.mode';
+import {EmailNotification} from '../models/email-notification.model';
 import PasswordResetData from '../models/password-reset-data.mode';
+import {SmsNotification} from '../models/sms-notification.model';
 import {UserRepository} from '../repositories';
 import {AuthService} from '../services/auth.service';
 import {Encryption} from '../services/encryption.service';
+import {NotificationService} from '../services/notification.service';
 
 export class UserController {
   authService: AuthService;
@@ -57,6 +60,12 @@ export class UserController {
     })
     user: Omit<User, 'id'>,
   ): Promise<User> {
+    // let randomPassword = generate({
+    //   length: PasswordKeys.LENGTH,
+    //   numbers: PasswordKeys.NUMBERS,
+    //   lowercase: PasswordKeys.LOWERCASE,
+    //   uppercase: PasswordKeys.UPPERCASE,
+    // });
     let paconstord = new Encryption(Keys.SHA_512).Encrypt(user.password);
     let password1 = new Encryption(Keys.SHA_512).Encrypt(paconstord);
     user.password = password1;
@@ -220,27 +229,69 @@ export class UserController {
   })
   async reset(
     @requestBody() passwordResetData: PasswordResetData,
-  ): Promise<Object> {
-    let randomPassword = this.authService.ResetPassword(
+  ): Promise<boolean> {
+    let randomPassword = await this.authService.ResetPassword(
       passwordResetData.email,
     );
+
     if (randomPassword) {
       // send sms or mail with new password
       // 1. sms
       // 2. email
+      let user = await this.userRepository.findOne({
+        where: {email: passwordResetData.email},
+      });
+
+      console.log('password: ' + randomPassword);
+      // console.log('phone number is: ' + user?.cellphone);
+
       switch (passwordResetData.type) {
         case 1:
           //send sms
-          console.log('Sending sms: ' + randomPassword);
-          return randomPassword;
+          if (user) {
+            let notification = new SmsNotification({
+              body: `Su nueva contraseña es: ${randomPassword}`,
+              to: `${user.cellphone}`,
+            });
+            // console.log(
+            //   `El usuario es ${user} y la notificacion es: ${notification}`,
+            // );
+            let sms = await new NotificationService().SmsNotification(
+              notification,
+            );
+            console.log(`el sms es ${sms}`);
+            if (sms) {
+              console.log('sms message send');
+              return true;
+            }
+            throw new HttpErrors[400]('Phone is not found');
+            // console.log('Sending sms: ' + randomPassword);
+            // return randomPassword;
+          }
+          throw new HttpErrors[400]('user not found');
           break;
         case 2:
           //send mail
-          console.log('Sending mail: ' + randomPassword);
-          return randomPassword;
-          break;
-
-        default:
+          if (user) {
+            let notification = new EmailNotification({
+              textBody: `Su nueva contraseña es: ${randomPassword}`,
+              htmlBody: `Su nueva contraseña es: ${randomPassword}`,
+              to: user.email,
+              subject: 'Nueva contraseña',
+            });
+            let mail = await new NotificationService().MailNotification(
+              notification,
+            );
+            console.log(`mail is : ${mail}`);
+            if (mail) {
+              console.log('mail message send');
+              return true;
+            }
+            throw new HttpErrors[400]('Email is not found');
+            // console.log('Sending sms: ' + randomPassword);
+            // return randomPassword;
+          }
+          throw new HttpErrors[400]('user not found');
           break;
       }
     }

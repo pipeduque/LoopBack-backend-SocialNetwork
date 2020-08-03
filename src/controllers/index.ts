@@ -46,3 +46,6 @@ export * from './request-user.controller';
 export * from './user-request.controller';
 export * from './owner-room.controller';
 export * from './room-owner.controller';
+export * from './user-notification.controller';
+export * from './notification-comment.controller';
+export * from './notification.controller';

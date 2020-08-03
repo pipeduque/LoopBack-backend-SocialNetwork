@@ -66,7 +66,7 @@ export class AuthService {
     console.log(email);
     let user = await this.userRepository.findOne({where: {email: email}});
     if (user) {
-      let randomPassword = generator({
+      let randomPassword = await generator({
         length: passKeys.LENGTH,
         numbers: passKeys.NUMBERS,
         lowercase: passKeys.LOWERCASE,

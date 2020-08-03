@@ -14,3 +14,5 @@ export * from './report.model';
 export * from './request.model';
 export * from './room.model';
 export * from './user.model';
+export * from './notification.model';
+export * from './email-notification.model';
