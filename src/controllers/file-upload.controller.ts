@@ -2,6 +2,7 @@ import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {
   HttpErrors,
+  param,
   post,
   Request,
   requestBody,
@@ -11,6 +12,7 @@ import {
 import multer from 'multer';
 import path from 'path';
 import {UploadFilesKeys} from '../keys/upload-files-keys';
+import {User} from '../models';
 import {
   PublicationFileRepository,
   RoomRepository,
@@ -32,6 +34,58 @@ export class FileUploadController {
     @repository(RoomRepository)
     private roomRepository: RoomRepository,
   ) {}
+
+  // POST PARA USER IMAGE ASOCIADO A UN USERID
+
+  /**
+   * Add or replace the profile photo of a customer by customerId
+   * @param request
+   * @param userId
+   * @param response
+   */
+  @post('/userProfilePhoto', {
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+            },
+          },
+        },
+        description: 'User Photo Path',
+      },
+    },
+  })
+  async customerPhotoUpload(
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+    @param.query.string('userId') userId: string,
+    @requestBody.file() request: Request,
+  ): Promise<object | false> {
+    const userPhotoPath = path.join(
+      __dirname,
+      UploadFilesKeys.FOTO_PERFIL_IMAGE_PATH,
+    );
+    let res = await this.StoreFileToPath(
+      userPhotoPath,
+      UploadFilesKeys.FOTO_PERFIL_IMAGE_FIELDNAME,
+      request,
+      response,
+      UploadFilesKeys.IMAGE_ACCEPTED_EXT,
+    );
+    if (res) {
+      const filename = response.req?.file.filename;
+      if (filename) {
+        let us: User = await this.userRepository.findById(userId);
+        if (us) {
+          us.pathPhoto = filename;
+          this.userRepository.replaceById(userId, us);
+          return {filename: filename};
+        }
+      }
+    }
+    return res;
+  }
 
   // POST PARA ROOM
 
