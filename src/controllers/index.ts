@@ -49,3 +49,5 @@ export * from './room-owner.controller';
 export * from './user-notification.controller';
 export * from './notification-comment.controller';
 export * from './notification.controller';
+export * from './file-upload.controller';
+export * from './file-download.controller';

@@ -1,8 +1,15 @@
-import {Entity, model, property, hasOne, hasMany, belongsTo} from '@loopback/repository';
-import {Publication} from './publication.model';
+import {
+  belongsTo,
+  Entity,
+  hasMany,
+  hasOne,
+  model,
+  property,
+} from '@loopback/repository';
 import {Occupant} from './occupant.model';
-import {Request} from './request.model';
 import {Owner} from './owner.model';
+import {Publication} from './publication.model';
+import {Request} from './request.model';
 
 @model()
 export class Room extends Entity {
@@ -17,6 +24,12 @@ export class Room extends Entity {
     type: 'string',
   })
   reference?: string;
+
+  @property({
+    type: 'string',
+    required: false,
+  })
+  path: string;
 
   @property({
     type: 'string',
