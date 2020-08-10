@@ -28,4 +28,5 @@ export interface PublicationFileRelations {
   // describe navigational properties here
 }
 
-export type PublicationFileWithRelations = PublicationFile & PublicationFileRelations;
+export type PublicationFileWithRelations = PublicationFile &
+  PublicationFileRelations;

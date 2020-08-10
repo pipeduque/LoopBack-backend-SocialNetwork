@@ -15,13 +15,19 @@ export class Publication extends Entity {
     type: 'string',
     required: false,
   })
-  pathPublication: string;
+  content: string;
+
+  @property({
+    type: 'string',
+    required: false,
+  })
+  pathImage?: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  text: string;
+  title: string;
 
   @property({
     type: 'date',

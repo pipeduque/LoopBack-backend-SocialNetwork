@@ -12,9 +12,9 @@ import {
 import multer from 'multer';
 import path from 'path';
 import {UploadFilesKeys} from '../keys/upload-files-keys';
-import {User} from '../models';
+import {Publication, User} from '../models';
 import {
-  PublicationFileRepository,
+  PublicationRepository,
   RoomRepository,
   UserRepository,
 } from '../repositories';
@@ -23,17 +23,71 @@ export class FileUploadController {
   /**
    *
    * @param UserRepostory
-   * @param PublicationFileRepository
+   * @param PublicationRepository
    * @param RoomRepository
    */
   constructor(
     @repository(UserRepository)
     private userRepository: UserRepository,
-    @repository(PublicationFileRepository)
-    private publicationRepository: PublicationFileRepository,
+    @repository(PublicationRepository)
+    private publicationRepository: PublicationRepository,
     @repository(RoomRepository)
     private roomRepository: RoomRepository,
   ) {}
+
+  // POST PARA PUBLICATION IMAGE ASOCIADO A UN PUBLICATIONID
+
+  /**
+   * Add or replace the profile photo of a customer by customerId
+   * @param request
+   * @param publicationId
+   * @param response
+   */
+  @post('/publicationImage', {
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+            },
+          },
+        },
+        description: 'Publication Image Path associated to PublicationId',
+      },
+    },
+  })
+  async publicationUpload(
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+    @param.query.string('publicationId') publicationId: string,
+    @requestBody.file() request: Request,
+  ): Promise<object | false> {
+    const publicationPath = path.join(
+      __dirname,
+      UploadFilesKeys.PUBLICATION_IMAGE_PATH,
+    );
+    let res = await this.StoreFileToPath(
+      publicationPath,
+      UploadFilesKeys.PUBLICATION_IMAGE_FIELDNAME,
+      request,
+      response,
+      UploadFilesKeys.IMAGE_ACCEPTED_EXT,
+    );
+    if (res) {
+      const filename = response.req?.file.filename;
+      if (filename) {
+        let pub: Publication = await this.publicationRepository.findById(
+          publicationId,
+        );
+        if (pub) {
+          pub.pathImage = filename;
+          this.publicationRepository.replaceById(publicationId, pub);
+          return {filename: filename};
+        }
+      }
+    }
+    return res;
+  }
 
   // POST PARA USER IMAGE ASOCIADO A UN USERID
 
@@ -138,7 +192,7 @@ export class FileUploadController {
    * @param publicationId
    * @param request
    */
-  @post('/publicationImage', {
+  @post('/publicationImg', {
     responses: {
       200: {
         content: {
