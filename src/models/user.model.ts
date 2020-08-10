@@ -63,7 +63,7 @@ export class User extends Entity {
   password: string;
 
   @property({
-    type: 'date',
+    type: 'string',
     required: true,
   })
   birthday: string;
