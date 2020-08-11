@@ -5,7 +5,7 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
   del,
@@ -16,7 +16,7 @@ import {
   patch,
   post,
   put,
-  requestBody,
+  requestBody
 } from '@loopback/rest';
 import {Keys} from '../keys/keys';
 import {User} from '../models';
@@ -66,9 +66,8 @@ export class UserController {
     //   lowercase: PasswordKeys.LOWERCASE,
     //   uppercase: PasswordKeys.UPPERCASE,
     // });
-    let paconstord = new Encryption(Keys.SHA_512).Encrypt(user.password);
-    let password1 = new Encryption(Keys.SHA_512).Encrypt(paconstord);
-    user.password = password1;
+    let password = new Encryption(Keys.SHA_512).Encrypt(user.password);
+    user.password = password;
     return this.userRepository.create(user);
   }
 
@@ -216,7 +215,7 @@ export class UserController {
         token: token,
       };
     } else {
-      throw new HttpErrors[401]('Usuario o contraseña invalidad');
+      throw new HttpErrors[401]('Usuario o contraseña invalida');
     }
   }
 
