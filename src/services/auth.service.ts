@@ -28,6 +28,28 @@ export class AuthService {
     }
     return false;
   }
+
+  async VerifyUserToChangePassword(id: string, userPassword: string): Promise<User | false> {
+    let user = await this.userRepository.findById(id);
+    if (user) {
+      let pass = new Encryption(Keys.SHA_512).Encrypt(userPassword);
+      if (pass === user.password) {
+        return user;
+      }
+    }
+    return false;
+  }
+
+  async ChangePassword(user: User, newPassword: string): Promise<boolean> {
+    try {
+      let pass = new Encryption(Keys.SHA_512).Encrypt(newPassword);
+      user.password = pass;
+      await this.userRepository.updateById(user.id, user);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
   /**
    *
    * @param user

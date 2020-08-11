@@ -20,6 +20,7 @@ import {
 } from '@loopback/rest';
 import {Keys} from '../keys/keys';
 import {User} from '../models';
+import changePasswordData from '../models/change-password.model';
 import Credentials from '../models/credentials.mode';
 import {EmailNotification} from '../models/email-notification.model';
 import PasswordResetData from '../models/password-reset-data.mode';
@@ -294,6 +295,27 @@ export class UserController {
           break;
       }
     }
-    throw new HttpErrors[400]('User not found');
+    throw new HttpErrors[401]('User not found');
+  }
+
+  @post('/change-password', {
+    responses: {
+      '200': {
+        description: 'Change password',
+      },
+    },
+  })
+  async changePassword(
+    @requestBody() data: changePasswordData): Promise<boolean> {
+    let user = await this.authService.VerifyUserToChangePassword(
+      data.id,
+      data.userPassword
+    );
+    if (user) {
+      return await this.authService.ChangePassword(user, data.newPassword);
+
+    } else {
+      throw new HttpErrors[401]('Usuario o contraseña invalida');
+    }
   }
 }
