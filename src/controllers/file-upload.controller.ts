@@ -1,7 +1,9 @@
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {
+  get,
   HttpErrors,
+  oas,
   param,
   post,
   Request,
@@ -12,7 +14,7 @@ import {
 import multer from 'multer';
 import path from 'path';
 import {UploadFilesKeys} from '../keys/upload-files-keys';
-import {Publication, User} from '../models';
+import {Publication, Room, User} from '../models';
 import {
   PublicationRepository,
   RoomRepository,
@@ -335,5 +337,73 @@ export class FileUploadController {
       },
     });
     return storage;
+  }
+  /**
+   *
+   * @param recordId
+   * @param response
+   */
+  @get('/files/{type}/{recordId}')
+  @oas.response.file()
+  async downloadFile(
+    @param.path.string('type') type: string,
+    @param.path.string('recordId') recordId: string,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ) {
+    // let filename
+    const folder = this.GetFolderPathByType(type);
+    const fileName = await this.GetFilenameById(type, recordId);
+    const file = path.resolve(folder, fileName);
+    response.download(file, fileName);
+    return response;
+  }
+  /**
+   * Get the folder when files are uploaded by type
+   * @param type
+   */
+  private GetFolderPathByType(type: string) {
+    let filePath = '';
+    switch (type) {
+      // publication
+      case 'publication':
+        filePath = path.join(__dirname, UploadFilesKeys.PUBLICATION_IMAGE_PATH);
+        break;
+      // room
+      case 'room':
+        filePath = path.join(__dirname, UploadFilesKeys.ROOM_IMAGE_PATH);
+        break;
+      // user
+      case 'user':
+        filePath = path.join(__dirname, UploadFilesKeys.FOTO_PERFIL_IMAGE_PATH);
+        break;
+    }
+    return filePath;
+  }
+  /**
+   *
+   * @param type
+   */
+  private async GetFilenameById(type: string, recordId: string) {
+    let fileName = '';
+    switch (type) {
+      // publication
+      case 'publication':
+        const publication: Publication = await this.publicationRepository.findById(
+          recordId,
+        );
+        fileName = publication.pathImage ?? '';
+        break;
+      // room
+      case 'room':
+        const room: Room = await this.roomRepository.findById(recordId);
+        fileName = room.path ?? '';
+        break;
+      // user
+      case 'user':
+        const user: User = await this.userRepository.findById(recordId);
+        fileName = user.pathPhoto ?? '';
+        break;
+    }
+    return fileName;
   }
 }
