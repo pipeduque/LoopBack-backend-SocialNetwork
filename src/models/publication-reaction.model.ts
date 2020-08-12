@@ -1,7 +1,6 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
-import {Reaction} from './reaction.model';
-import {User} from './user.model';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Publication} from './publication.model';
+import {User} from './user.model';
 
 @model()
 export class PublicationReaction extends Entity {
@@ -17,8 +16,8 @@ export class PublicationReaction extends Entity {
   })
   date: string;
 
-  @belongsTo(() => Reaction)
-  reactionId: string;
+  // @belongsTo(() => Reaction)
+  // reactionId: string;
 
   @belongsTo(() => User)
   userId: string;
