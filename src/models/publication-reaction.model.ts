@@ -11,7 +11,7 @@ export class PublicationReaction extends Entity {
   })
   id?: string;
   @property({
-    type: 'date',
+    type: 'string',
     required: true,
   })
   date: string;
