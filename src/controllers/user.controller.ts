@@ -128,7 +128,7 @@ export class UserController {
     return this.userRepository.updateAll(user, where);
   }
 
-  @authenticate('TokenUserStrategy')
+  // @authenticate('TokenUserStrategy')
   @get('/user/{id}', {
     responses: {
       '200': {
