@@ -37,6 +37,60 @@ export class FileUploadController {
     private roomRepository: RoomRepository,
   ) {}
 
+// POST PARA ROOM IMAGE ASOCIADO A UN ROOMID
+
+  /**
+   * Add or replace the profile photo of a customer by customerId
+   * @param request
+   * @param roomId
+   * @param response
+   */
+  @post('/roomAssociatedImage', {
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+            },
+          },
+        },
+        description: 'Room Image Path associated to RoomId',
+      },
+    },
+  })
+  async roomUpload(
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+    @param.query.string('roomId') roomId: string,
+    @requestBody.file() request: Request,
+  ): Promise<object | false> {
+    const roomPath = path.join(
+      __dirname,
+      UploadFilesKeys.ROOM_IMAGE_PATH,
+    );
+    let res = await this.StoreFileToPath(
+      roomPath,
+      UploadFilesKeys.ROOM_IMAGE_FIELDNAME,
+      request,
+      response,
+      UploadFilesKeys.IMAGE_ACCEPTED_EXT,
+    );
+    if (res) {
+      const filename = response.req?.file.filename;
+      if (filename) {
+        let rm: Room = await this.roomRepository.findById(
+          roomId,
+        );
+        if (rm) {
+          rm.path = filename;
+          this.roomRepository.replaceById(roomId, rm);
+          return {filename: filename};
+        }
+      }
+    }
+    return res;
+  }
+
   // POST PARA PUBLICATION IMAGE ASOCIADO A UN PUBLICATIONID
 
   /**

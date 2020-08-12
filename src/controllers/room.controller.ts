@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -24,6 +25,7 @@ export class RoomController {
     @repository(RoomRepository)
     public roomRepository : RoomRepository,
   ) {}
+
 
   @post('/rooms', {
     responses: {
