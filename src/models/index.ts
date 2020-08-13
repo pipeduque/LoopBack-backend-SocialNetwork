@@ -17,3 +17,4 @@ export * from './user.model';
 export * from './notification.model';
 export * from './email-notification.model';
 export * from './images.model';
+export * from './follower.model';

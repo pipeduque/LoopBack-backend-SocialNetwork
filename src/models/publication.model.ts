@@ -30,7 +30,7 @@ export class Publication extends Entity {
   title: string;
 
   @property({
-    type: 'date',
+    type: 'string',
     required: true,
   })
   date: string;

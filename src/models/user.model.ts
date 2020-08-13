@@ -7,6 +7,7 @@ import {Owner} from './owner.model';
 import {Ownerhasfollowers} from './ownerhasfollowers.model';
 import {Publication} from './publication.model';
 import {Request} from './request.model';
+import {Follower} from './follower.model';
 
 @model()
 export class User extends Entity {
@@ -108,6 +109,9 @@ export class User extends Entity {
 
   @hasMany(() => Notification)
   notification: Notification[];
+
+  @hasMany(() => Follower)
+  followers: Follower[];
 
   constructor(data?: Partial<User>) {
     super(data);
