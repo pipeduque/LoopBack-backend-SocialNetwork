@@ -9,7 +9,7 @@ import {
   Request,
   requestBody,
   Response,
-  RestBindings,
+  RestBindings
 } from '@loopback/rest';
 import multer from 'multer';
 import path from 'path';
@@ -18,7 +18,7 @@ import {Publication, Room, User} from '../models';
 import {
   PublicationRepository,
   RoomRepository,
-  UserRepository,
+  UserRepository
 } from '../repositories';
 
 export class FileUploadController {
@@ -37,7 +37,7 @@ export class FileUploadController {
     private roomRepository: RoomRepository,
   ) {}
 
-// POST PARA ROOM IMAGE ASOCIADO A UN ROOMID
+  // POST PARA ROOM IMAGE ASOCIADO A UN ROOMID
 
   /**
    * Add or replace the profile photo of a customer by customerId
