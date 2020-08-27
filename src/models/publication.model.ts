@@ -1,5 +1,4 @@
 import {belongsTo, Entity, model, property} from '@loopback/repository';
-import {Room} from './room.model';
 import {User} from './user.model';
 
 @model()
@@ -37,9 +36,6 @@ export class Publication extends Entity {
 
   @belongsTo(() => User)
   userId: string;
-
-  @belongsTo(() => Room)
-  roomId: string;
 
   constructor(data?: Partial<Publication>) {
     super(data);

@@ -1,13 +1,9 @@
 import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Chat} from './chat.model';
+import {Follower} from './follower.model';
 import {Message} from './message.model';
 import {Notification} from './notification.model';
-import {Occupant} from './occupant.model';
-import {Owner} from './owner.model';
-import {Ownerhasfollowers} from './ownerhasfollowers.model';
 import {Publication} from './publication.model';
-import {Request} from './request.model';
-import {Follower} from './follower.model';
 
 @model()
 export class User extends Entity {
@@ -67,7 +63,7 @@ export class User extends Entity {
     type: 'string',
     required: true,
   })
-  birthday: string;
+  birthdate: string;
 
   @property({
     type: 'string',
@@ -94,18 +90,6 @@ export class User extends Entity {
 
   @hasMany(() => Message)
   messages: Message[];
-
-  @hasMany(() => Owner)
-  owners: Owner[];
-
-  @hasMany(() => Ownerhasfollowers)
-  ownerhasfollowers: Ownerhasfollowers[];
-
-  @hasMany(() => Occupant)
-  occupants: Occupant[];
-
-  @hasMany(() => Request)
-  requests: Request[];
 
   @hasMany(() => Notification)
   notification: Notification[];

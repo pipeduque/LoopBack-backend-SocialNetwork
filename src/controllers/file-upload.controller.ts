@@ -14,10 +14,9 @@ import {
 import multer from 'multer';
 import path from 'path';
 import {UploadFilesKeys} from '../keys/upload-files-keys';
-import {Publication, Room, User} from '../models';
+import {Publication, User} from '../models';
 import {
   PublicationRepository,
-  RoomRepository,
   UserRepository
 } from '../repositories';
 
@@ -33,8 +32,6 @@ export class FileUploadController {
     private userRepository: UserRepository,
     @repository(PublicationRepository)
     private publicationRepository: PublicationRepository,
-    @repository(RoomRepository)
-    private roomRepository: RoomRepository,
   ) {}
 
   // POST PARA ROOM IMAGE ASOCIADO A UN ROOMID
@@ -45,51 +42,6 @@ export class FileUploadController {
    * @param roomId
    * @param response
    */
-  @post('/roomAssociatedImage', {
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'object',
-            },
-          },
-        },
-        description: 'Room Image Path associated to RoomId',
-      },
-    },
-  })
-  async roomUpload(
-    @inject(RestBindings.Http.RESPONSE) response: Response,
-    @param.query.string('roomId') roomId: string,
-    @requestBody.file() request: Request,
-  ): Promise<object | false> {
-    const roomPath = path.join(
-      __dirname,
-      UploadFilesKeys.ROOM_IMAGE_PATH,
-    );
-    let res = await this.StoreFileToPath(
-      roomPath,
-      UploadFilesKeys.ROOM_IMAGE_FIELDNAME,
-      request,
-      response,
-      UploadFilesKeys.IMAGE_ACCEPTED_EXT,
-    );
-    if (res) {
-      const filename = response.req?.file.filename;
-      if (filename) {
-        let rm: Room = await this.roomRepository.findById(
-          roomId,
-        );
-        if (rm) {
-          rm.path = filename;
-          this.roomRepository.replaceById(roomId, rm);
-          return {filename: filename};
-        }
-      }
-    }
-    return res;
-  }
 
   // POST PARA PUBLICATION IMAGE ASOCIADO A UN PUBLICATIONID
 
@@ -446,11 +398,6 @@ export class FileUploadController {
           recordId,
         );
         fileName = publication.pathImage ?? '';
-        break;
-      // room
-      case 'room':
-        const room: Room = await this.roomRepository.findById(recordId);
-        fileName = room.path ?? '';
         break;
       // user
       case 'user':
