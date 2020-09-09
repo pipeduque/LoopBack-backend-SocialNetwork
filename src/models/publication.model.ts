@@ -14,7 +14,13 @@ export class Publication extends Entity {
     type: 'string',
     required: false,
   })
-  content: string;
+  content?: string;
+
+  @property({
+    type: 'string',
+    required: false,
+  })
+  location?: string;
 
   @property({
     type: 'string',

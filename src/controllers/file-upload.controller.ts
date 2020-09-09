@@ -149,49 +149,6 @@ export class FileUploadController {
     return res;
   }
 
-  // POST PARA ROOM
-
-  /**
-   *
-   * @param response
-   * @param roomId
-   * @param request
-   */
-  @post('/roomImage', {
-    responses: {
-      200: {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'object',
-            },
-          },
-        },
-        description: 'Room Image',
-      },
-    },
-  })
-  async roomImageUpload(
-    @inject(RestBindings.Http.RESPONSE) response: Response,
-    @requestBody.file() request: Request,
-  ): Promise<object | false> {
-    const roomImagePath = path.join(__dirname, UploadFilesKeys.ROOM_IMAGE_PATH);
-    let res = await this.StoreFileToPath(
-      roomImagePath,
-      UploadFilesKeys.ROOM_IMAGE_FIELDNAME,
-      request,
-      response,
-      UploadFilesKeys.IMAGE_ACCEPTED_EXT,
-    );
-    if (res) {
-      const filename = response.req?.file.filename;
-      if (filename) {
-        return {filename: filename};
-      }
-    }
-    return res;
-  }
-
   //POST PARA PUBLICATION IMAGE
 
   /**
@@ -230,8 +187,12 @@ export class FileUploadController {
       UploadFilesKeys.IMAGE_ACCEPTED_EXT,
     );
     if (res) {
-      const filename = response.req?.file.filename;
+      const filename = response.req?.body.file.filename;
+
+      console.log(res);
+      console.log(filename);
       if (filename) {
+        console.log(filename);
         return {filename: filename};
       }
     }
@@ -373,10 +334,6 @@ export class FileUploadController {
       // publication
       case 'publication':
         filePath = path.join(__dirname, UploadFilesKeys.PUBLICATION_IMAGE_PATH);
-        break;
-      // room
-      case 'room':
-        filePath = path.join(__dirname, UploadFilesKeys.ROOM_IMAGE_PATH);
         break;
       // user
       case 'user':
